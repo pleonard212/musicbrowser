@@ -10,8 +10,8 @@
 var force;
 var svg;
 
-var width = 400;
-var height = 400;
+var width = 640;
+var height = 640;
 
 var color = d3.scale.category10();
 var init = false;
@@ -44,7 +44,8 @@ function draw() {
         .size([width, height]);
 
       svg = d3.select("svg")
-
+      svg.selectAll(".node").remove();
+	  svg.selectAll("line.link").remove();
 	  var known_connectors = {}
 	  console.log(link_categories);
 	  for (n in link_categories) {
@@ -162,12 +163,18 @@ function setup() {
     var c = window.exhibit.getDefaultCollection();
     c.addListener({
         onItemsChanged: function() {
-          console.log(getData());
+        //console.log(getData());
         //        updateGraph();
+          if ($(".networkView").css("display") == "block") {
+            draw();
+          }
         },
         onRootItemsChanged: function() {
-          console.log(getData());
+        //console.log(getData());
         //        updateGraph();
+          if ($(".networkView").css("display") == "block") {
+            draw();
+          }
         }
     });
   }
@@ -178,13 +185,13 @@ $(document).ready(function(){
     $("#select-view").on("click","span",function(event){
         console.log($(".exhibit-tileView-body").css("display"));
         if (event.target.id == "select-list") {          
-          $(".exhibit-tileView-body").show()
+          $(".exhibit-viewPanel").show()
           $(".networkView").hide();
         }
         else if (event.target.id == "select-network") {
-          $(".exhibit-tileView-body").hide();
-          $(".networkView").remove();
-     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
+          $(".exhibit-viewPanel").hide();
+//          $(".networkView").remove();
+//     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
           $(".networkView").show();
           draw();
         }
@@ -244,7 +251,11 @@ circle {
   strokw-width:3px;
 
 }
-
+tr.networkView {
+  position:absolute;
+  top: 48px;
+  left: 0px;
+}
 text {
   pointer-events: none;
   font: 10px sans-serif;
@@ -288,8 +299,9 @@ text.shadow {
 
 <table style="width:1100px;">
 <tr> <td colspan="3" id='select-view' style="vertical-align:top; width:1100px;"> View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </td> </tr>
+<tr class='networkView' style='display:none;'><td colspan='2'> <svg style='width:650px; height:650px;'></svg> </td></tr>
 <tr>
-<td rowspan="2" style="vertical-align:top;width:400px;">
+<td rowspan="2" style="vertical-align:top;width:640px;">
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
