@@ -210,7 +210,7 @@ $(document).ready(function(){
 </script>
   <link rel="exhibit/data" 
        type="application/jsonp"
-       href="http://spreadsheets.google.com/feeds/list/0AmBs9Mxg3GWBdEVHdHM1QV9xZDduY3BEUWUyeVlaMEE/od6/public/basic?alt=json-in-script"
+       href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdHJmd2Z0MWlOdDEtNHdLV2UxV1pJbFE/od6/public/basic?alt=json-in-script"
       
        ex:converter="googleSpreadsheets" />
 
@@ -313,10 +313,10 @@ text.shadow {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$(this).find('div.articlemeta').append('<br><audio controls preload=\x22none\x22><source src=\x22classical.mp3\x22 type=\x22audio/mpeg\x22></audio>');$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;"></h3>
+    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22none\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;"></h3>
     <div class="articlemeta"><b ex:content=".composer"></b> <span ex:content="if(exists(.year), .year, 'Unknown')"></span> </div>
 
-
+    <source ex:src-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}" type="audio/mpeg">
     <div ex:if-exists=".programnote" class="programnote" id=""> <p ex:content=".programnote" ></p>    </div>
     
 
