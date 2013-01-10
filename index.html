@@ -38,9 +38,12 @@ var link_categories = [
 
 function draw() {
       var nodes = getData();
+      if (force) {
+        force.stop();
+      }
       force = d3.layout.force()
-        .charge(-1 * height / 3)
-        .linkDistance(75)
+        .charge(-1 * height / 5)
+        .linkDistance(50)
         .size([width, height]);
 
       svg = d3.select("svg")
@@ -95,7 +98,7 @@ function draw() {
 	
 	  force
 		  .nodes(nodes)
-		  .links(dynamic_links);
+		  .links(dynamic_links);	
       force.start()
 
 	  var link_updates = svg.selectAll("line.link")
@@ -116,12 +119,17 @@ function draw() {
 		.on("mousedown", function(d) { d.fixed = true; d3.select(this).select("circle").style("stroke", "black").style("stroke-width","4"); })
 		.on("dblclick", function(d) { d.fixed = false;d3.select(this).select("circle").style("stroke", "white").style("stroke-width","2") });	
 	  nodes.append("circle")
-		.attr("r", 5)
+		.attr("r", 6)
 		.style("fill", function(d) { return color(d.group); });	
 	  nodes.append("title")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
 		.text(function(d) { return JSON.stringify(d) });	
+      nodes.append("text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .attr("class", "shadow")
+        .text(function(d) { return d.label; });
 	  nodes.append("text")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
