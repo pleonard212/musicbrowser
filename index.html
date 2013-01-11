@@ -317,6 +317,8 @@ text.shadow {
     visibility: hidden;
 }
 
+ul, ol {padding-left:0;}
+
 </style>
 
 
@@ -326,7 +328,7 @@ text.shadow {
 <body>
  
 
-<table style="width:1100px;">
+<table style="width:100%;table-layout: fixed;min-width:1020px;">
 <tr> <td colspan="3" id='select-view' style="vertical-align:top; width:1100px;"> View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </td> </tr>
 <tr class='networkView' style='display:none;'><td colspan='1'> 
 <svg style='width:650px; height:650px;'></svg> 
@@ -340,7 +342,7 @@ text.shadow {
 
 </td></tr>
 <tr>
-<td rowspan="2" style="vertical-align:top;width:640px;">
+<td rowspan="2" style="vertical-align:top;min-width:600px;width:600px;">
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
@@ -357,7 +359,7 @@ text.shadow {
 
 
 </td>
-<td colspan="2">
+<td colspan="2" style="width:400px;">
  <div ex:role="facet" ex:facetLabel="Search All Data" ex:facetClass="TextSearch"></div>
 </td></tr>
 <tr>
