@@ -18,19 +18,19 @@ var init = false;
 
 var link_categories = [
  {"name":"style",
-  "color":1,
+  "color":"#ff7f0e",
   "active":true
  },
  {"name":"topos",
-  "color":2,
+  "color":"#2ca02c",
   "active":true
  },
  {"name":"slwork",
-  "color":3,
+  "color":"#d62728",
   "active":true
  },
  {"name":"cites",
-  "color":4,
+  "color":"#9467bd",
   "active":true
  }
 ]
@@ -56,6 +56,7 @@ function draw() {
 	  }
 	  console.log(known_connectors);
 	  var dynamic_links = [];
+
 	
 /*	
 	  var to_filter = [];
@@ -81,7 +82,7 @@ function draw() {
 					known_connectors[column][value] = nodes.length;
 					var new_node = {"label":value,
 									"type":column,
-									"group":link_categories[i].color,
+									"color":link_categories[i].color,
 									"id":nodes.length
 					};
 					nodes.push(new_node);
@@ -120,7 +121,7 @@ function draw() {
 		.on("dblclick", function(d) { d.fixed = false;d3.select(this).select("circle").style("stroke", "white").style("stroke-width","2") });	
 	  nodes.append("circle")
 		.attr("r", 6)
-		.style("fill", function(d) { return color(d.group); });	
+		.style("fill", function(d) { return d.color || "#1f77b4"; });	
 	  nodes.append("title")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
@@ -167,7 +168,12 @@ function setup() {
     eTimeout = setTimeout("setup()",250);
   } else {
     console.log("ready")
-    console.log(getData());
+//    console.log(getData());
+    var l_column_pos = $("exhibit-viewPanel").offset();
+    var l_column_width = $("exhibit-viewPanel").width();
+    $("svg").offset(l_column_pos);
+    $("svg").width(l_column_width);
+    $(".legend-container").width(l_column_width);
     var c = window.exhibit.getDefaultCollection();
     c.addListener({
         onItemsChanged: function() {
@@ -185,26 +191,41 @@ function setup() {
           }
         }
     });
+    $("#select-view").on("click","span",function(event){
+        console.log($(".exhibit-tileView-body").css("display"));
+        if (event.target.id == "select-list") {          
+            $(".exhibit-viewPanel").show()
+            $(".networkView").hide();
+        }
+        else if (event.target.id == "select-network") {
+            $(".exhibit-viewPanel").hide();
+//          $(".networkView").remove();
+//     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
+            $(".networkView").show();
+            draw();
+        }
+    });
+    $(".legend").on("click",function(e){
+        console.log(event.target.id);
+        for (n in link_categories) {
+          if (link_categories[n].name == this.id) {
+            link_categories[n].active = !link_categories[n].active;
+            console.log(link_categories[n]);
+            if (link_categories[n].active) {
+                $(this).css("color",link_categories[n].color);
+            }
+            else {
+                $(this).css("color","gray");
+            }
+          }
+        }
+        draw();    
+    });
   }
 }
 
 $(document).ready(function(){
     setup();
-    $("#select-view").on("click","span",function(event){
-        console.log($(".exhibit-tileView-body").css("display"));
-        if (event.target.id == "select-list") {          
-          $(".exhibit-viewPanel").show()
-          $(".networkView").hide();
-        }
-        else if (event.target.id == "select-network") {
-          $(".exhibit-viewPanel").hide();
-//          $(".networkView").remove();
-//     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
-          $(".networkView").show();
-          draw();
-        }
-    });
-    
 });
 
 </script>
@@ -238,7 +259,7 @@ div.programnote a, div.programnote a:visited {
 
 audio {width:100%;display:block;}
 
-h3 {font-style:italic;
+h5 {font-style:normal;
 	line-height: 100%;
 	margin-bottom:0;
 	font-weight:normal;
@@ -307,7 +328,17 @@ text.shadow {
 
 <table style="width:1100px;">
 <tr> <td colspan="3" id='select-view' style="vertical-align:top; width:1100px;"> View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </td> </tr>
-<tr class='networkView' style='display:none;'><td colspan='2'> <svg style='width:650px; height:650px;'></svg> </td></tr>
+<tr class='networkView' style='display:none;'><td colspan='1'> 
+<svg style='width:650px; height:650px;'></svg> 
+<h5 class="legend-container" style="width:640px;">Drag a node to fix it in space. Double-click to release. 
+<p>Legend: 
+<span style="color:#1f77b4;">Compositions</span>, 
+<span class="legend" style="color:#ff7f0e;" id="style">Style</span>, 
+<span class="legend" style="color:#2ca02c;" id="topos">Topoi</span>, 
+<span class="legend" style="color:#d62728;" id="slwork">Sounds Like</span>, 
+<span class="legend" style="color:#9467bd" id="cites">Cites</span> [click to toggle]</h3> 
+
+</td></tr>
 <tr>
 <td rowspan="2" style="vertical-align:top;width:640px;">
 <ul ex:role="viewPanel">
