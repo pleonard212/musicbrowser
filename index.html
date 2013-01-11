@@ -10,27 +10,27 @@
 var force;
 var svg;
 
-var width = 400;
-var height = 400;
+var width = 640;
+var height = 640;
 
 var color = d3.scale.category10();
 var init = false;
 
 var link_categories = [
  {"name":"style",
-  "color":1,
+  "color":"#ff7f0e",
   "active":true
  },
  {"name":"topos",
-  "color":2,
+  "color":"#2ca02c",
   "active":true
  },
  {"name":"slwork",
-  "color":3,
+  "color":"#d62728",
   "active":true
  },
  {"name":"cites",
-  "color":4,
+  "color":"#9467bd",
   "active":true
  }
 ]
@@ -38,13 +38,17 @@ var link_categories = [
 
 function draw() {
       var nodes = getData();
+      if (force) {
+        force.stop();
+      }
       force = d3.layout.force()
-        .charge(-1 * height / 3)
-        .linkDistance(75)
+        .charge(-1 * height / 5)
+        .linkDistance(50)
         .size([width, height]);
 
       svg = d3.select("svg")
-
+      svg.selectAll(".node").remove();
+	  svg.selectAll("line.link").remove();
 	  var known_connectors = {}
 	  console.log(link_categories);
 	  for (n in link_categories) {
@@ -52,6 +56,7 @@ function draw() {
 	  }
 	  console.log(known_connectors);
 	  var dynamic_links = [];
+
 	
 /*	
 	  var to_filter = [];
@@ -77,7 +82,7 @@ function draw() {
 					known_connectors[column][value] = nodes.length;
 					var new_node = {"label":value,
 									"type":column,
-									"group":link_categories[i].color,
+									"color":link_categories[i].color,
 									"id":nodes.length
 					};
 					nodes.push(new_node);
@@ -94,7 +99,7 @@ function draw() {
 	
 	  force
 		  .nodes(nodes)
-		  .links(dynamic_links);
+		  .links(dynamic_links);	
       force.start()
 
 	  var link_updates = svg.selectAll("line.link")
@@ -115,12 +120,17 @@ function draw() {
 		.on("mousedown", function(d) { d.fixed = true; d3.select(this).select("circle").style("stroke", "black").style("stroke-width","4"); })
 		.on("dblclick", function(d) { d.fixed = false;d3.select(this).select("circle").style("stroke", "white").style("stroke-width","2") });	
 	  nodes.append("circle")
-		.attr("r", 5)
-		.style("fill", function(d) { return color(d.group); });	
+		.attr("r", 6)
+		.style("fill", function(d) { return d.color || "#1f77b4"; });	
 	  nodes.append("title")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
 		.text(function(d) { return JSON.stringify(d) });	
+      nodes.append("text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .attr("class", "shadow")
+        .text(function(d) { return d.label; });
 	  nodes.append("text")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
@@ -158,44 +168,70 @@ function setup() {
     eTimeout = setTimeout("setup()",250);
   } else {
     console.log("ready")
-    console.log(getData());
+//    console.log(getData());
+    var l_column_pos = $("exhibit-viewPanel").offset();
+    var l_column_width = $("exhibit-viewPanel").width();
+    $("svg").offset(l_column_pos);
+    $("svg").width(l_column_width);
+    $(".legend-container").width(l_column_width);
     var c = window.exhibit.getDefaultCollection();
     c.addListener({
         onItemsChanged: function() {
-          console.log(getData());
+        //console.log(getData());
         //        updateGraph();
+          if ($(".networkView").css("display") == "block") {
+            draw();
+          }
         },
         onRootItemsChanged: function() {
-          console.log(getData());
+        //console.log(getData());
         //        updateGraph();
+          if ($(".networkView").css("display") == "block") {
+            draw();
+          }
         }
+    });
+    $("#select-view").on("click","span",function(event){
+        console.log($(".exhibit-tileView-body").css("display"));
+        if (event.target.id == "select-list") {          
+            $(".exhibit-viewPanel").show()
+            $(".networkView").hide();
+        }
+        else if (event.target.id == "select-network") {
+            $(".exhibit-viewPanel").hide();
+//          $(".networkView").remove();
+//     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
+            $(".networkView").show();
+            draw();
+        }
+    });
+    $(".legend").on("click",function(e){
+        console.log(event.target.id);
+        for (n in link_categories) {
+          if (link_categories[n].name == this.id) {
+            link_categories[n].active = !link_categories[n].active;
+            console.log(link_categories[n]);
+            if (link_categories[n].active) {
+                $(this).css("color",link_categories[n].color);
+            }
+            else {
+                $(this).css("color","gray");
+            }
+          }
+        }
+        draw();    
     });
   }
 }
 
 $(document).ready(function(){
     setup();
-    $("#select-view").on("click","span",function(event){
-        console.log($(".exhibit-tileView-body").css("display"));
-        if (event.target.id == "select-list") {          
-          $(".exhibit-tileView-body").show()
-          $(".networkView").hide();
-        }
-        else if (event.target.id == "select-network") {
-          $(".exhibit-tileView-body").hide();
-          $(".networkView").remove();
-     	  $(".exhibit-tileView-body").after("<svg class='networkView' style='display:none; width:620px; height:620px;'></svg>");
-          $(".networkView").show();
-          draw();
-        }
-    });
-    
 });
 
 </script>
   <link rel="exhibit/data" 
        type="application/jsonp"
-       href="http://spreadsheets.google.com/feeds/list/0AmBs9Mxg3GWBdEVHdHM1QV9xZDduY3BEUWUyeVlaMEE/od6/public/basic?alt=json-in-script"
+       href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdHJmd2Z0MWlOdDEtNHdLV2UxV1pJbFE/od6/public/basic?alt=json-in-script"
       
        ex:converter="googleSpreadsheets" />
 
@@ -223,7 +259,7 @@ div.programnote a, div.programnote a:visited {
 
 audio {width:100%;display:block;}
 
-h3 {font-style:italic;
+h5 {font-style:normal;
 	line-height: 100%;
 	margin-bottom:0;
 	font-weight:normal;
@@ -244,7 +280,11 @@ circle {
   strokw-width:3px;
 
 }
-
+tr.networkView {
+  position:absolute;
+  top: 48px;
+  left: 0px;
+}
 text {
   pointer-events: none;
   font: 10px sans-serif;
@@ -258,6 +298,25 @@ text.shadow {
   stroke-opacity: .8;
 }
 
+/* fixes for Safari scrollbars in Lion and Mountain Lion */
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  visibility: hidden; 
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(0,0,0,0.5);
+}
+
+::-webkit-scrollbar:window-inactive {
+    visibility: hidden;
+}
+
 </style>
 
 
@@ -269,15 +328,26 @@ text.shadow {
 
 <table style="width:1100px;">
 <tr> <td colspan="3" id='select-view' style="vertical-align:top; width:1100px;"> View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </td> </tr>
+<tr class='networkView' style='display:none;'><td colspan='1'> 
+<svg style='width:650px; height:650px;'></svg> 
+<h5 class="legend-container" style="width:640px;">Drag a node to fix it in space. Double-click to release. 
+<p>Legend: 
+<span style="color:#1f77b4;">Compositions</span>, 
+<span class="legend" style="color:#ff7f0e;" id="style">Style</span>, 
+<span class="legend" style="color:#2ca02c;" id="topos">Topoi</span>, 
+<span class="legend" style="color:#d62728;" id="slwork">Sounds Like</span>, 
+<span class="legend" style="color:#9467bd" id="cites">Cites</span> [click to toggle]</h5> 
+
+</td></tr>
 <tr>
-<td rowspan="2" style="vertical-align:top;width:400px;">
+<td rowspan="2" style="vertical-align:top;width:640px;">
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$(this).find('div.articlemeta').append('<br><audio controls preload=\x22none\x22><source src=\x22classical.mp3\x22 type=\x22audio/mpeg\x22></audio>');$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;"></h3>
+    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22none\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;margin:0;"></h3>
     <div class="articlemeta"><b ex:content=".composer"></b> <span ex:content="if(exists(.year), .year, 'Unknown')"></span> </div>
 
-
+    <source ex:src-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}" type="audio/mpeg">
     <div ex:if-exists=".programnote" class="programnote" id=""> <p ex:content=".programnote" ></p>    </div>
     
 
