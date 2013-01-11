@@ -3,8 +3,9 @@
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <script charset="utf-8" src="exhibit/api/exhibit-api.js?bundle=false" type="text/javascript"></script>
 <script charset="utf-8" src="exhibit/api/andListfacet.js" type="text/javascript"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="jquery.expander.min.js"></script> 
 <script type="text/javascript">
 
 var force;
@@ -316,9 +317,7 @@ text.shadow {
 ::-webkit-scrollbar:window-inactive {
     visibility: hidden;
 }
-
 ul, ol {padding-left:0;}
-
 </style>
 
 
@@ -327,9 +326,9 @@ ul, ol {padding-left:0;}
 </head>
 <body>
  
+View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> 
+<table style="table-layout: fixed;min-width:1020px;width:100%;">
 
-<table style="width:100%;table-layout: fixed;min-width:1020px;">
-<tr> <td colspan="3" id='select-view' style="vertical-align:top; width:1100px;"> View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </td> </tr>
 <tr class='networkView' style='display:none;'><td colspan='1'> 
 <svg style='width:650px; height:650px;'></svg> 
 <h5 class="legend-container" style="width:640px;">Drag a node to fix it in space. Double-click to release. 
