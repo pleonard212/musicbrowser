@@ -348,7 +348,7 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22metadata\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;margin:0;"></h3>
+    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22none\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;margin:0;"></h3>
     <div class="articlemeta"><b ex:content=".composer"></b> <span ex:content="if(exists(.year), .year, 'Unknown')"></span> </div>
 
     <source ex:src-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}" type="audio/mpeg">
