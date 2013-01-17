@@ -371,9 +371,23 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
 
 
    </div>
-	<div ex:role="facet" ex:expression=".composer" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count" ></div>
+   <div style="border:1px solid black;">
+	<div ex:role="facet" ex:expression=".composer" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count" style="margin:2px;"></div>
+	
+	
+	<table style="width:100%;"><tr>
+	<td style="width:50%;">
+	<div ex:role="facet" ex:expression=".mf" ex:scroll="false" ex:showMissing="false" ex:facetLabel="Gender" ></div>
+	</td>
+	<td style="width:50%;vertical-align:top;">
+	<div ex:role="facet" ex:expression=".eu" ex:scroll="false" ex:showMissing="false" ex:facetLabel="EU" ></div>
+	</td>	
+	</tr>
+	</table>
+	<div ex:role="facet" ex:expression=".nation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Nationality" ex:sortMode="count" style="margin:2px;"></div>
+   </div>
 	 	<div ex:role="facet" ex:expression=".style" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Style" ex:sortMode="count" ></div>	     
-	  	<div ex:role="facet" ex:expression=".cites" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Cites" ex:sortMode="count" ></div>	     
+	     
 	 <div ex:role="facet" ex:expression=".topos" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Topos" ex:sortMode="count" ></div>	   
   
 </td>
@@ -381,8 +395,9 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
     	<div ex:role="facet" ex:expression=".genre" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Genre" ex:sortMode="count" ></div>   
   
 	<div ex:role="facet" ex:expression=".slwork" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Sounds Like (work)" ex:sortMode="count" ></div> 
+		  	<div ex:role="facet" ex:expression=".cites" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Cites" ex:sortMode="count" ></div>
 	
-	<div ex:role="facet" ex:expression=".nation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer Nationality" ex:sortMode="count" ></div>
+	
 	<div ex:role="facet" ex:expression=".premierenation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Premiere Location" ex:sortMode="count" ></div>	 	  
 	    
 		 
