@@ -362,7 +362,14 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
 
 </td>
 <td colspan="2" style="width:400px;">
- <div ex:role="facet" ex:facetLabel="Search All Data" ex:facetClass="TextSearch"></div>
+ <div id="search-box">
+<table style="width:100%;border-bottom:1px dotted grey;">
+<tr>
+ <td ex:role="facet" ex:facetLabel="Search Titles" style="width:50%;padding-right:8px;"ex:facetClass="TextSearch" ex:expressions=".label"></td>
+ <td ex:role="facet" ex:facetLabel="Search Program Notes" style="width:50%;" ex:facetClass="TextSearch" ex:expressions=".programnote"></td>
+</tr>
+</table>
+</div>
 </td></tr>
 <tr>
 <td style="vertical-align:top;width:200px;">
