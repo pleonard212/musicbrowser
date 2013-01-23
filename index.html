@@ -366,6 +366,7 @@ div.exhibit-flowingFacet-body {
     <div class="articlemeta"><b ex:content=".composer"></b> <span ex:content="if(exists(.year), .year, 'Unknown')"></span> </div>
 
     <source ex:src-subcontent="../1989/{{.mp3}}" type="audio/mpeg">
+    <div ex:if-exists=".style" class="compositionstyle" > <p ex:content=".style" ></p>    </div>
     <div ex:if-exists=".programnote" class="programnote" id=""> <p ex:content=".programnote" ></p>    </div>
     
 
