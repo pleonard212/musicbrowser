@@ -261,10 +261,15 @@ $(document).ready(function(){
 
 <style type="text/css">
 body {font-family: Helvetica, sans-serif;}
+
+
 a.title-link {color:black;text-decoration:none;}
 a.title-link:hover {color:blue}
 ol.exhibit-tileView-body {
 	list-style: none;
+}
+ol.exhibit-tileView-body li {
+    margin-bottom:3px;
 }
 
 a.exhibit-facet-value-link {font-size:.9em;}
@@ -283,7 +288,7 @@ font-size: .7em;color:grey;
 -moz-column-count:2; /* Firefox */
 -webkit-column-count:2; /* Safari and Chrome */
 column-count:2;
-margin-bottom:2px;
+margin-bottom:3px;
 
 }
 
@@ -383,7 +388,7 @@ div.exhibit-flowingFacet-body {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens">
+    <div ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 250;$(this).find('span.note-content').expander();">
     <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}"><h3 ex:content=".label" style="font-family:serif;font-size:1.1em;font-weight:normal;font-style:italic;margin:0;display:inline;"></h3> |
   <span ex:content=".composer" style="font-size:1.1em;font-family:serif;"></span> <span ex:content="if(exists(.year), .year, 'Unknown')"> </span></a>
     <div class="compositionmeta">
@@ -393,7 +398,7 @@ div.exhibit-flowingFacet-body {
     <div ex:if-exists=".slwork" ><b>Sounds Like:</b> <span ex:content=".slwork" ></span>    </div>
     <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
     </div>
-    <div ex:if-exists=".programnote" class="programnote" id=""> <p><b>Program Notes:  </b><span ex:content=".programnote" ></span></p>    </div>
+    <div ex:if-exists=".programnote" class="programnote" id=""> <b>Program Notes:  </b><span class="note-content" ex:content=".programnote" ></span>    </div>
     <div ex:if-exists=".annotations" class="annotations" id=""> <p><b>Annotations:  </b><span ex:content=".annotations"></span></p></div>
 
     </div>
