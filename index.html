@@ -207,6 +207,15 @@ function setup() {
             draw();
         }
     });
+    $("body").on("click",".title-link",function(event){
+        var url = $(this).attr("href");
+        var seconds = 0;
+        console.log(url);
+        $("audio#main-player").attr("src",url);
+        $("audio#main-player").attr("onloadeddata","console.log('onloaded');console.log(new Date().getTime() / 1000);console.log(this.duration);this.currentTime = "+seconds+";");
+        $("audio#main-player").attr("oncanplaythrough","console.log('canplaythrough');console.log(new Date().getTime() / 1000);console.log(this.duration);this.play();");
+        return false;
+    });
     $(".legend").on("click",function(e){
         console.log(event.target.id);
         for (n in link_categories) {
@@ -252,6 +261,8 @@ $(document).ready(function(){
 
 <style type="text/css">
 body {font-family: Helvetica, sans-serif;}
+a.title-link {color:black;text-decoration:none;}
+a.title-link:hover {color:blue}
 ol.exhibit-tileView-body {
 	list-style: none;
 }
@@ -278,7 +289,7 @@ margin-bottom:2px;
 
 .black, .black a {color:black;}
 
-audio {width:100%;display:block;}
+audio#main-player {width:100%;display:block; position:fixed;bottom:0px;}
 
 h5 {font-style:normal;
 	line-height: 100%;
@@ -372,9 +383,9 @@ div.exhibit-flowingFacet-body {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22none\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  >
-    <h3 ex:content=".label" style="font-family:serif;font-size:1.1em;font-weight:normal;font-style:italic;margin:0;display:inline;"></h3> |
-  <span ex:content=".composer" style="font-size:1.1em;font-family:serif;"></span> <span ex:content="if(exists(.year), .year, 'Unknown')"> </span>
+    <div ex:role="lens">
+    <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}"><h3 ex:content=".label" style="font-family:serif;font-size:1.1em;font-weight:normal;font-style:italic;margin:0;display:inline;"></h3> |
+  <span ex:content=".composer" style="font-size:1.1em;font-family:serif;"></span> <span ex:content="if(exists(.year), .year, 'Unknown')"> </span></a>
     <div class="compositionmeta">
     <div ex:if-exists=".genre"><b>Genre:</b> <span ex:content=".genre" ></span>    </div>
     <div ex:if-exists=".style"  ><b>Style:</b> <span ex:content=".style" ></span>    </div>
@@ -382,9 +393,8 @@ div.exhibit-flowingFacet-body {
     <div ex:if-exists=".slwork" ><b>Sounds Like:</b> <span ex:content=".slwork" ></span>    </div>
     <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
     </div>
-    <source ex:src-subcontent="../1989/{{.mp3}}" type="audio/mpeg">
-    <div ex:if-exists=".programnote" class="programnote" id=""> <p ex:content=".programnote" ></p>    </div>
-    
+    <div ex:if-exists=".programnote" class="programnote" id=""> <p><b>Program Notes:  </b><span ex:content=".programnote" ></span></p>    </div>
+    <div ex:if-exists=".annotations" class="annotations" id=""> <p><b>Annotations:  </b><span ex:content=".annotations"></span></p></div>
 
     </div>
 
@@ -451,7 +461,7 @@ div.exhibit-flowingFacet-body {
 
 
  </body>
-
+<audio id="main-player" controls="controls"></audio>
 
 
 </html>
