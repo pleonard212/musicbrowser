@@ -170,11 +170,12 @@ function setup() {
   } else {
     console.log("ready")
 //    console.log(getData());
-    var l_column_pos = $("exhibit-viewPanel").offset();
-    var l_column_width = $("exhibit-viewPanel").width();
-    $("svg").offset(l_column_pos);
-    $("svg").width(l_column_width);
-    $(".legend-container").width(l_column_width);
+	var l_column_width = $("#search-box").offset().left - 10;    
+	console.log(l_column_width);
+	$(".networkView").width(l_column_width);
+	$("svg").attr("width",l_column_width);
+	$("svg").attr("height",l_column_width);
+	$(".legend-container").width(l_column_width);
     var c = window.exhibit.getDefaultCollection();
     c.addListener({
         onItemsChanged: function() {
@@ -206,6 +207,15 @@ function setup() {
             draw();
         }
     });
+    $("body").on("click",".title-link",function(event){
+        var url = $(this).attr("href");
+        var seconds = 0;
+        console.log(url);
+        $("audio#main-player").attr("src",url);
+        $("audio#main-player").attr("onloadeddata","console.log('onloaded');console.log(new Date().getTime() / 1000);console.log(this.duration);this.currentTime = "+seconds+";");
+        $("audio#main-player").attr("oncanplaythrough","console.log('canplaythrough');console.log(new Date().getTime() / 1000);console.log(this.duration);this.play();");
+        return false;
+    });
     $(".legend").on("click",function(e){
         console.log(event.target.id);
         for (n in link_categories) {
@@ -227,6 +237,15 @@ function setup() {
 
 $(document).ready(function(){
     setup();
+    $(window).resize(function() {
+	    var l_column_width = $("#search-box").offset().left - 10;    
+	    console.log(l_column_width);
+	    $(".networkView").width(l_column_width);
+	    $("svg").attr("width",l_column_width);
+	    $("svg").attr("height",l_column_width);
+	    $(".legend-container").width(l_column_width);
+
+    });
 });
 
 </script>
@@ -242,23 +261,41 @@ $(document).ready(function(){
 
 <style type="text/css">
 body {font-family: Helvetica, sans-serif;}
+
+
+a.title-link {color:black;text-decoration:none;}
+a.title-link:hover {color:blue}
 ol.exhibit-tileView-body {
 	list-style: none;
 }
-
+ol.exhibit-tileView-body li {
+    margin-bottom:2px;
+}
 a.exhibit-facet-value-link {font-size:.9em;}
 div.programnote {
 	font-size:.8em;	
 	padding-left:10px;
-
+	margin-bottom:2px;
 }
-
-div.programnote a, div.programnote a:visited {
+div.annotations {
+    font-size:.8em;
+    padding-left:10px;
+}
+div.programnote a, div.programnote a:visited div.annotations a, div.annotations a:visited{
 	color:grey; text-decoration: underline;
+}
+div.compositionmeta {
+font-size: .7em;color:grey;
+-moz-column-count:2; /* Firefox */
+-webkit-column-count:2; /* Safari and Chrome */
+column-count:2;
+margin-top:1px;
+margin-bottom:2px;
+padding-left:10px;
 }
 .black, .black a {color:black;}
 
-audio {width:100%;display:block;}
+audio#main-player {width:100%;display:block; position:fixed;bottom:0px;}
 
 h5 {font-style:normal;
 	line-height: 100%;
@@ -281,7 +318,7 @@ circle {
   strokw-width:3px;
 
 }
-tr.networkView {
+div.networkView {
   position:absolute;
   top: 48px;
   left: 0px;
@@ -301,23 +338,32 @@ text.shadow {
 
 /* fixes for Safari scrollbars in Lion and Mountain Lion */
 
-::-webkit-scrollbar {
-    width: 7px;
+::-webkit-scrollbar:vertical {
+    width: 4px;
 }
 
-::-webkit-scrollbar-track {
-  visibility: hidden; 
+::-webkit-scrollbar-track:vertical {
+  visibility:visible; 
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb:vertical {
     border-radius: 4px;
     background: rgba(0,0,0,0.5);
 }
 
-::-webkit-scrollbar:window-inactive {
-    visibility: hidden;
-}
+
 ul, ol {padding-left:0;}
+span#select-list {text-decoration:underline;color:blue;}
+span#select-network {text-decoration:underline;color:blue;}
+
+
+
+div.exhibit-flowingFacet-body {
+	border:1px solid #ddd;
+	
+}
+
+
 </style>
 
 
@@ -326,31 +372,35 @@ ul, ol {padding-left:0;}
 </head>
 <body>
  
-View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> 
-<table style="table-layout: fixed;min-width:1020px;width:100%;">
-
-<tr class='networkView' style='display:none;'><td colspan='1'> 
-<svg style='width:650px; height:650px;'></svg> 
-<h5 class="legend-container" style="width:640px;">Drag a node to fix it in space. Double-click to release. 
+<div id='select-view'>View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </div>
+<div class='networkView' style='display:none;'>
+<svg></svg> 
+<h5 class="legend-container">Drag a node to fix it in space. Double-click to release. 
 <p>Legend: 
 <span style="color:#1f77b4;">Compositions</span>, 
 <span class="legend" style="color:#ff7f0e;" id="style">Style</span>, 
 <span class="legend" style="color:#2ca02c;" id="topos">Topoi</span>, 
 <span class="legend" style="color:#d62728;" id="slwork">Sounds Like</span>, 
 <span class="legend" style="color:#9467bd" id="cites">Cites</span> [click to toggle]</h5> 
-
-</td></tr>
+</div>
+<table style="table-layout: fixed;min-width:1020px;width:100%;">
 <tr>
-<td rowspan="2" style="vertical-align:top;min-width:600px;width:600px;">
+<td rowspan="2" style="vertical-align:top;min-width:600px;width:100%;">
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$(this).attr('id', function () { return 'result'+this.getAttribute('ex:itemID');});$(this).find('source').wrap('<audio controls preload=\x22none\x22>');$.expander.defaults.slicePoint = 500;$(this).find('p').expander();" style="margin:5px 0 10px 0;padding-left:10px;"  ><h3 ex:content=".label" style="font-family:serif;font-size:1.5em;margin:0;"></h3>
-    <div class="articlemeta"><b ex:content=".composer"></b> <span ex:content="if(exists(.year), .year, 'Unknown')"></span> </div>
-
-    <source ex:src-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}" type="audio/mpeg">
-    <div ex:if-exists=".programnote" class="programnote" id=""> <p ex:content=".programnote" ></p>    </div>
-    
+    <div ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 250;$(this).find('span.note-content').expander();">
+    <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/1989/{{.mp3}}"><h3 ex:content=".label" style="font-family:serif;font-size:1.1em;font-weight:normal;font-style:italic;margin:0;display:inline;"></h3> -
+  <span ex:content=".composer" style="font-size:1.1em;font-family:serif;"></span> <span ex:content="if(exists(.year), .year, 'Unknown')"> </span></a>
+    <div class="compositionmeta">
+    <div ex:if-exists=".genre"><b>Genre:</b> <span ex:content=".genre" ></span>    </div>
+    <div ex:if-exists=".style"  ><b>Style:</b> <span ex:content=".style" ></span>    </div>
+    <div ex:if-exists=".topos"  ><b>Topoi:</b> <span ex:content=".topos" ></span>    </div>
+    <div ex:if-exists=".slwork" ><b>Sounds Like:</b> <span ex:content=".slwork" ></span>    </div>
+    <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
+    </div>
+    <div ex:if-exists=".programnote" class="programnote" id=""> <b>Program Notes:  </b><span class="note-content" ex:content=".programnote" ></span>    </div>
+    <div ex:if-exists=".annotations" class="annotations" id=""> <p><b>Annotations:  </b><span ex:content=".annotations"></span></p></div>
 
     </div>
 
@@ -359,27 +409,53 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
 
 </td>
 <td colspan="2" style="width:400px;">
- <div ex:role="facet" ex:facetLabel="Search All Data" ex:facetClass="TextSearch"></div>
+<div id="search-box">
+<table style="width:100%;border-bottom:1px dotted grey;">
+<tr>
+ <td ex:role="facet" ex:facetLabel="Search Titles" style="width:33%;padding-right:8px;"ex:facetClass="TextSearch" ex:expressions=".label"></td>
+ <td ex:role="facet" ex:facetLabel="Search Notes" style="width:33%;padding-right:8px;" ex:facetClass="TextSearch" ex:expressions=".programnote"></td>
+  <td ex:role="facet" ex:facetLabel="Search All" style="width:33%;"ex:facetClass="TextSearch"></td>
+</tr>
+</table>
+</div>
 </td></tr>
 <tr>
 <td style="vertical-align:top;width:200px;">
+
 
   
 
 
    </div>
-	<div ex:role="facet" ex:expression=".composer" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count" ></div>
+   <div style="border:1px solid black;">
+	<div ex:role="facet" ex:expression=".composer" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count" style="margin:2px;"></div>
+	
+	
+	<table style="width:100%;"><tr>
+	<td style="width:100px;vertical-align:top;">
+	<div ex:role="facet" ex:expression=".nation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Nationality" ex:sortMode="count" style="margin:2px;font-size:.8em;"></div>
+	</td>
+	<td style="width:100px;vertical-align:top;">
+	<div ex:role="facet" ex:expression=".eu" ex:scroll="false" ex:showMissing="false" ex:facetLabel="EU?" style="font-size:.8em;" ></div>
+	<div ex:role="facet" ex:expression=".mf" ex:scroll="false" ex:showMissing="false" ex:facetLabel="Gender" style="font-size:.8em;"  ></div>
+	</td>	
+	</tr>
+	</table>
+	
+   </div>
 	 	<div ex:role="facet" ex:expression=".style" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Style" ex:sortMode="count" ></div>	     
-	  	<div ex:role="facet" ex:expression=".cites" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Cites" ex:sortMode="count" ></div>	     
+	     
 	 <div ex:role="facet" ex:expression=".topos" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Topos" ex:sortMode="count" ></div>	   
-  
+
 </td>
 <td  style="vertical-align:top;width:200px;">
+
     	<div ex:role="facet" ex:expression=".genre" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Genre" ex:sortMode="count" ></div>   
   
 	<div ex:role="facet" ex:expression=".slwork" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Sounds Like (work)" ex:sortMode="count" ></div> 
+		  	<div ex:role="facet" ex:expression=".cites" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Cites" ex:sortMode="count" ></div>
 	
-	<div ex:role="facet" ex:expression=".nation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer Nationality" ex:sortMode="count" ></div>
+	
 	<div ex:role="facet" ex:expression=".premierenation" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Premiere Location" ex:sortMode="count" ></div>	 	  
 	    
 		 
@@ -391,7 +467,7 @@ View as <span id='select-list'>List</span> | <span id='select-network'>Network</
 
 
  </body>
-
+<audio id="main-player" controls="controls"></audio>
 
 
 </html>
