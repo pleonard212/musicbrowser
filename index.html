@@ -28,6 +28,10 @@ var link_categories = [
   "color":"#2ca02c",
   "active":true
  },
+ {"name":"cites",
+  "color":"#000",
+  "active":true
+ },
  {"name":"soundslike",
   "color":"#d62728",
   "active":true
@@ -140,11 +144,17 @@ function draw() {
         .attr("x", 8)
         .attr("y", ".31em")
         .attr("class", "shadow")
-        .text(function(d) { return d.label; });
+        .text(function(d) { 
+			if (d.year) {return d.year + ' ' + d.label};
+			if (!d.year) {return d.label};
+        });
 	  nodes.append("text")
 		.attr("dx", 8)
 		.attr("dy", ".31em")
-		.text(function(d) { return d.label });	
+        .text(function(d) { 
+			if (d.year) {return d.year + ' ' + d.label};
+			if (!d.year) {return d.label};
+        });
 
 	  force.on("tick", function() {
 		svg.selectAll("line.link").attr("x1", function(d) { return d.source.x; })
@@ -258,12 +268,56 @@ $(document).ready(function(){
 });
 
 </script>
-  <link rel="exhibit/data" 
-       type="application/jsonp"
-       href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od6/public/basic?alt=json-in-script"
-      
-       ex:converter="googleSpreadsheets" />
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od6/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
 
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od7/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od4/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od5/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/oda/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/odb/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od8/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od9/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocy/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" /> 
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocz/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
  <link href="music-schema.js" type="application/json" rel="exhibit/data" />
 
 
@@ -388,6 +442,7 @@ div.exhibit-flowingFacet-body {
 <p>Legend: 
 <span style="color:#1f77b4;">Compositions</span>, 
 <span class="legend" style="color:#ff7f0e;" id="genre">Genre</span>, 
+<span class="legend" style="color:#000;" id="cites">Cites</span>, 
 <span class="legend" style="color:#2ca02c;" id="topos">Topoi</span>, 
 <span class="legend" style="color:#d62728;" id="group">Group</span>, 
 <span class="legend" style="color:#9467bd" id="soundslike">Sounds Like</span> [click to toggle]</h5>
@@ -398,29 +453,31 @@ div.exhibit-flowingFacet-body {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('div.programnote').expander();">
+    <div  style="border-top:2px solid grey;margin-top:5px;" ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('p.expandablenote').expander();">
     <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/fourcomposers/{{.mp3}}">
-    <h3 style="font-family:serif;font-size:1.1em;font-weight:normal;margin:0;display:inline;">
-    	<span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span>: <span ex:content=".subtitle"></span>
+    <h3 style="font-family:serif;font-size:1.1em;font-weight:normal;margin:0;padding-left:10px;padding-top:5px;display:inline;">
+    	<span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span><span ex:if-exists=".subtitle">: <span ex:content=".subtitle"></span></span>
     </h3>
-    <h3 ex:content=".movementTitle" style="font-family:sans-serif;font-size:1.0em;font-weight:normal;margin:0;display:block;"></h3>
+    <h3 ex:content=".movementTitle" style="font-family:sans-serif;font-size:0.8em;font-weight:normal;margin:0;display:block;padding-left:10px;"></h3>
     </a>
     <div class="compositionmeta">
     <div ex:if-exists=".genre"><b>Genre:</b> <span ex:content=".genre" ></span>    </div>
+        <div ex:if-exists=".forces"><b>Forces:</b> <span ex:content=".forces" ></span>    </div>
+
     <div ex:if-exists=".style"  ><b>Style:</b> <span ex:content=".style" ></span>    </div>
     <div ex:if-exists=".topos"  ><b>Topoi:</b> <span ex:content=".topos" ></span>    </div>
     <div ex:if-exists=".slwork" ><b>Sounds Like:</b> <span ex:content=".slwork" ></span>    </div>
     <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
     </div>
 	<div class="programnote" id="">
-    <p ex:if-exists=".noteComposerEnglish1" ex:content=".noteComposerEnglish1" ></p>
-    <p ex:if-exists=".noteComposerEnglish2" ex:content=".noteComposerEnglish2" ></p>
-    <p ex:if-exists=".noteComposerEnglish3" ex:content=".noteComposerEnglish3" ></p>       
-    <p ex:if-exists=".noteComposerGerman1" ex:content=".noteComposerGerman1" ></p>       
-    <p ex:if-exists=".noteOtherFrench1" ex:content=".noteOtherFrench1" ></p>       
-    <p ex:if-exists=".noteOtherItalian1" ex:content=".noteOtherItalian1" ></p>       
-    <p ex:if-exists=".noteOtherEnglish1" ex:content=".noteOtherEnglish1" ></p>       
-    <p ex:if-exists=".noteOtherGerman1" ex:content=".noteOtherGerman1" ></p>       
+    <p class="expandablenote" ex:if-exists=".noteComposerEnglish1" ex:content=".noteComposerEnglish1" ></p>
+    <p class="expandablenote"  ex:if-exists=".noteComposerEnglish2" ex:content=".noteComposerEnglish2" ></p>
+    <p class="expandablenote"  ex:if-exists=".noteComposerEnglish3" ex:content=".noteComposerEnglish3" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteComposerGerman1" ex:content=".noteComposerGerman1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherFrench1" ex:content=".noteOtherFrench1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherItalian1" ex:content=".noteOtherItalian1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherEnglish1" ex:content=".noteOtherEnglish1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherGerman1" ex:content=".noteOtherGerman1" ></p>       
     </div>   
     </div>
 
@@ -431,7 +488,7 @@ div.exhibit-flowingFacet-body {
 <table style="width:100%;border-bottom:1px dotted grey;">
 <tr>
  <td ex:role="facet" ex:facetLabel="Search Titles" style="width:33%;padding-right:8px;"ex:facetClass="TextSearch" ex:expressions=".label"></td>
- <td ex:role="facet" ex:facetLabel="Search Notes" style="width:33%;padding-right:8px;" ex:facetClass="TextSearch" ex:expressions=".programnote"></td>
+ <td ex:role="facet" ex:facetLabel="Search Notes" style="width:33%;padding-right:8px;" ex:facetClass="TextSearch" ex:expressions=".noteComposerEnglish1, .noteComposerEnglish2, .noteComposerEnglish3, .noteComposerGerman1, .noteOtherFrench1, .noteOtherItalian1, .noteOtherEnglish1, .noteOtherGerman1"></td>
   <td ex:role="facet" ex:facetLabel="Search All" style="width:33%;"ex:facetClass="TextSearch"></td>
 </tr>
 </table>
@@ -445,18 +502,21 @@ div.exhibit-flowingFacet-body {
 
 
    </div>
-   <div style="border:1px solid black;">
-	<div ex:role="facet" ex:expression=".author" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count" style="margin:2px;"></div>
-   </div>
-   	<div ex:role="facet" ex:expression=".group" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Group" ex:sortMode="count" ></div>
-   		<div ex:role="facet" ex:expression=".soundslike" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Sounds Like" ex:sortMode="count" ></div>
+
+	<div ex:role="facet" ex:expression=".author" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Composer" ex:sortMode="count"></div>
+
+   
+   	
+   	<div ex:role="facet" ex:expression=".topos" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Topos" ex:sortMode="count" ></div> 
+   		   	<div ex:role="facet" ex:expression=".cites" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Cites" ex:sortMode="count" ></div> 
+
 
 	 </td>
 <td  style="vertical-align:top;width:200px;">
 
     	<div ex:role="facet" ex:expression=".genre" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Genre" ex:sortMode="count" ></div>   
-  
- 	<div ex:role="facet" ex:expression=".topos" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Topos" ex:sortMode="count" ></div> 
+  	<div ex:role="facet" ex:expression=".group" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Group" ex:sortMode="count" ></div>
+ 	<div ex:role="facet" ex:expression=".soundslike" ex:scroll="true" ex:showMissing="false" ex:facetLabel="Sounds Like" ex:sortMode="count" ></div>
 		 	  
 		 
 
