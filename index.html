@@ -258,12 +258,56 @@ $(document).ready(function(){
 });
 
 </script>
-  <link rel="exhibit/data" 
-       type="application/jsonp"
-       href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od6/public/basic?alt=json-in-script"
-      
-       ex:converter="googleSpreadsheets" />
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od6/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
 
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od7/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od4/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od5/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/oda/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/odb/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od8/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od9/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocy/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" /> 
+
+<link rel="exhibit/data" 
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocz/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
  <link href="music-schema.js" type="application/json" rel="exhibit/data" />
 
 
@@ -398,7 +442,7 @@ div.exhibit-flowingFacet-body {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('div.programnote').expander();">
+    <div ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('p.expandablenote').expander();">
     <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/fourcomposers/{{.mp3}}">
     <h3 style="font-family:serif;font-size:1.1em;font-weight:normal;margin:0;display:inline;">
     	<span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span>: <span ex:content=".subtitle"></span>
@@ -413,14 +457,14 @@ div.exhibit-flowingFacet-body {
     <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
     </div>
 	<div class="programnote" id="">
-    <p ex:if-exists=".noteComposerEnglish1" ex:content=".noteComposerEnglish1" ></p>
-    <p ex:if-exists=".noteComposerEnglish2" ex:content=".noteComposerEnglish2" ></p>
-    <p ex:if-exists=".noteComposerEnglish3" ex:content=".noteComposerEnglish3" ></p>       
-    <p ex:if-exists=".noteComposerGerman1" ex:content=".noteComposerGerman1" ></p>       
-    <p ex:if-exists=".noteOtherFrench1" ex:content=".noteOtherFrench1" ></p>       
-    <p ex:if-exists=".noteOtherItalian1" ex:content=".noteOtherItalian1" ></p>       
-    <p ex:if-exists=".noteOtherEnglish1" ex:content=".noteOtherEnglish1" ></p>       
-    <p ex:if-exists=".noteOtherGerman1" ex:content=".noteOtherGerman1" ></p>       
+    <p class="expandablenote" ex:if-exists=".noteComposerEnglish1" ex:content=".noteComposerEnglish1" ></p>
+    <p class="expandablenote"  ex:if-exists=".noteComposerEnglish2" ex:content=".noteComposerEnglish2" ></p>
+    <p class="expandablenote"  ex:if-exists=".noteComposerEnglish3" ex:content=".noteComposerEnglish3" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteComposerGerman1" ex:content=".noteComposerGerman1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherFrench1" ex:content=".noteOtherFrench1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherItalian1" ex:content=".noteOtherItalian1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherEnglish1" ex:content=".noteOtherEnglish1" ></p>       
+    <p class="expandablenote"  ex:if-exists=".noteOtherGerman1" ex:content=".noteOtherGerman1" ></p>       
     </div>   
     </div>
 
