@@ -45,13 +45,15 @@ var link_categories = [
 
 function draw() {
       var nodes = getData();
+      var charge = document.getElementById('repulsionSlider').value;
       if (force) {
         force.stop();
       }
       force = d3.layout.force()
-        .charge(-1 * height / 5)
-        .linkDistance(50)
+        .charge(charge)
+        .linkDistance(80)
         .size([width, height]);
+
 
       svg = d3.select("svg")
       svg.selectAll(".node").remove();
@@ -166,6 +168,21 @@ function draw() {
 
 }
 
+function updateForce() {
+  force.stop();
+  
+  var newCharge = document.getElementById('repulsionSlider').value;
+  
+  document.getElementById('repulsionInput').value = newCharge;
+  
+  force
+  .charge(newCharge);
+  
+
+ 
+  force.start();
+}
+
 
 function getData() {	//Only working with one collection in this tool
 	var c = window.exhibit.getDefaultCollection();
@@ -274,6 +291,7 @@ href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2J
  ex:converter="googleSpreadsheets" />
 
 
+
 <link rel="exhibit/data" 
 type="application/jsonp"
 href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/od7/public/basic?alt=json-in-script"
@@ -318,9 +336,6 @@ href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2J
 type="application/jsonp"
 href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocz/public/basic?alt=json-in-script"
  ex:converter="googleSpreadsheets" />
- <link href="music-schema.js" type="application/json" rel="exhibit/data" />
-
-
 
 <style type="text/css">
 body {font-family: Helvetica, sans-serif;}
@@ -369,7 +384,6 @@ audio#main-player {width:100%;display:block; position:fixed;bottom:0px;}
 
 h5 {font-style:normal;
 	line-height: 100%;
-	margin-bottom:0;
 	font-weight:normal;
 	border-top: 3px double gray;
 }
@@ -407,19 +421,17 @@ text.shadow {
 }
 
 /* fixes for Safari scrollbars in Lion and Mountain Lion */
-
-::-webkit-scrollbar:vertical {
-    width: 4px;
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
 }
-
-::-webkit-scrollbar-track:vertical {
-  visibility:visible; 
-}
-
-::-webkit-scrollbar-thumb:vertical {
+::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
+
+
 
 
 ul, ol {padding-left:0;}
@@ -442,7 +454,17 @@ div.exhibit-flowingFacet-body {
 </head>
 <body>
  
-<div id='select-view'>View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> </div>
+<div id='select-view'>View as <span id='select-list'>List</span> | <span id='select-network'>Network</span> 
+ <form style="display:inline;">
+
+
+<div style="display:inline;padding:2px;border:1px dotted grey;">    Attraction <input id="repulsionSlider" type="range" onchange="updateForce(); highlightNodes()" min ="-500" max="0" step ="1"  value="-60" /> 
+  <input type="text" id="repulsionInput" value="-60"  style="width:30px;" />
+</form>
+</div>
+
+
+</div>
 <div class='networkView' style='display:none;'>
 <svg></svg> 
 <h5 class="legend-container">Drag a node to fix it in space. Double-click to release. 
