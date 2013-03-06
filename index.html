@@ -59,10 +59,12 @@ function render_annotation(annotation_element) {
 		r += a.substring(last_offset,start_offset);
 		last_offset = start_offset + raw_match.length;
 		file = raw_match.match(/\d+/);
+		fragment = raw_match.match(/#.*?\]/);
 		filename = window.exhibit._database.getItem(file).mp3;
 		console.log(file);
+		console.log(fragment);
 		url = "http://sethsem.uchicago.edu/~spb/fourcomposers/" + filename;
-		r += "<a class='annotation-link' href='"+url+"'>"+raw_match+"</a>"
+		r += "<a class='annotation-link' href='"+url+fragment+"'>"+raw_match+"</a>"
 		//a = a.substring(0,start_offset) + "<a class='annotation-link' href='"+url+"'>"+matches[0]+"</a>" + a.substring(last_offset);
 //		console.log(r);
 	}
@@ -281,8 +283,16 @@ function setup() {
     });
     $("body").on("click",".annotation-link",function(event){
         var url = $(this).attr("href");
-        var seconds = 0;
+        console.log(url)
+        matches = at_p.exec(url);
+        console.log(matches);
+        var hours = matches[1] || 0;
+        console.log(hours);
+        var min_sec = matches[2].split(":");        
+        console.log(min_sec);
+        var seconds = parseInt(min_sec[1]) + parseInt(min_sec[0] * 60) + parseInt(hours * 60 * 60);
         console.log(url);
+        console.log(seconds);
         $("audio#main-player").attr("src",url);
         $("audio#main-player").attr("onloadeddata","console.log('onloaded');console.log(new Date().getTime() / 1000);console.log(this.duration);this.currentTime = "+seconds+";");
         $("audio#main-player").attr("oncanplaythrough","console.log('canplaythrough');console.log(new Date().getTime() / 1000);console.log(this.duration);this.play();");
