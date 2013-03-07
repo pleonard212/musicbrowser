@@ -286,11 +286,14 @@ function setup() {
         console.log(url)
         matches = at_p.exec(url);
         console.log(matches);
-        var hours = matches[1] || 0;
-        console.log(hours);
-        var min_sec = matches[2].split(":");        
-        console.log(min_sec);
-        var seconds = parseInt(min_sec[1]) + parseInt(min_sec[0] * 60) + parseInt(hours * 60 * 60);
+		var seconds = 0;
+        if (matches) { 
+	        var hours = matches[1] || 0;
+    	    console.log(hours);
+        	var min_sec = matches[2].split(":");        
+        	console.log(min_sec);
+        	seconds = parseInt(min_sec[1]) + parseInt(min_sec[0] * 60) + parseInt(hours * 60 * 60);
+        }        	
         console.log(url);
         console.log(seconds);
         $("audio#main-player").attr("src",url);
