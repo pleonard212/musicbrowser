@@ -551,7 +551,7 @@ div.exhibit-flowingFacet-body {
     <div  style="border-top:2px solid grey;margin-top:5px;" ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('p.expandablenote').expander(); render_annotation($('.annotation',this));">
     <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/fourcomposers/{{.mp3}}">
     <h3 style="font-family:serif;font-size:1.1em;font-weight:normal;margin:0;padding-left:10px;padding-top:5px;display:inline;">
-    	<span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span><span ex:if-exists=".subtitle">: <span ex:content=".subtitle"></span></span>
+    	<span ex:content=".id2"></span><span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span><span ex:if-exists=".subtitle">: <span ex:content=".subtitle"></span></span>
     </h3>
     <h3 ex:content=".movementTitle" style="font-family:sans-serif;font-size:0.8em;font-weight:normal;margin:0;display:block;padding-left:10px;"></h3>
     </a>
