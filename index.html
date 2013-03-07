@@ -8,10 +8,14 @@
 <script src="jquery.expander.min.js"></script> 
 <script type="text/javascript">
 
+var a_pg = /\[(\d+)(#.*?)?\]/g;
 var a_p = /\[(\d+)(#.*?)?\]/;
 var at_p = /#(\d+:)?(\d+:\d+)(-(\d+:)?(\d+:\d+))?/;
 var force;
 var svg;
+var form_url = "https://docs.google.com/forms/d/1UbJKCPBmtKepm0PcBYJ9I8vTotQf6XWJh8mWTaZhyUg/viewform?entry.740238253=";
+var form_url_tail = "&entry.613094054&entry.803570344&entry.1346460270&entry.373219845&entry.1661221929"
+
 
 var width = 640;
 var height = 640;
@@ -42,6 +46,31 @@ var link_categories = [
  }
 ]
 
+function render_annotation(annotation_element) {
+	var a = $(annotation_element).text();
+	var r = ""
+	var last_offset = 0;
+	var all_matches = a.match(a_pg);
+	for (i in all_matches) {	
+		raw_match = all_matches[i];
+//		matches = a.match(raw_match);		
+		console.log(raw_match);
+		start_offset = a.indexOf(raw_match);
+		r += a.substring(last_offset,start_offset);
+		last_offset = start_offset + raw_match.length;
+		file = raw_match.match(/\d+/);
+		fragment = raw_match.match(/#.*?\]/);
+		filename = window.exhibit._database.getItem(file).mp3;
+		console.log(file);
+		console.log(fragment);
+		url = "http://sethsem.uchicago.edu/~spb/fourcomposers/" + filename;
+		r += "<a class='annotation-link' href='"+url+fragment+"'>"+raw_match+"</a>"
+		//a = a.substring(0,start_offset) + "<a class='annotation-link' href='"+url+"'>"+matches[0]+"</a>" + a.substring(last_offset);
+//		console.log(r);
+	}
+	r += a.substring(last_offset);
+	$(annotation_element).html(r);
+}
 
 function draw() {
       var nodes = getData();
@@ -252,6 +281,27 @@ function setup() {
         $("audio#main-player").attr("oncanplaythrough","console.log('canplaythrough');console.log(new Date().getTime() / 1000);console.log(this.duration);this.play();");
         return false;
     });
+    $("body").on("click",".annotation-link",function(event){
+        var url = $(this).attr("href");
+        console.log(url)
+        matches = at_p.exec(url);
+        console.log(matches);
+		var seconds = 0;
+        if (matches) { 
+	        var hours = matches[1] || 0;
+    	    console.log(hours);
+        	var min_sec = matches[2].split(":");        
+        	console.log(min_sec);
+        	seconds = parseInt(min_sec[1]) + parseInt(min_sec[0] * 60) + parseInt(hours * 60 * 60);
+        }        	
+        console.log(url);
+        console.log(seconds);
+        $("audio#main-player").attr("src",url);
+        $("audio#main-player").attr("onloadeddata","console.log('onloaded');console.log(new Date().getTime() / 1000);console.log(this.duration);this.currentTime = "+seconds+";");
+        $("audio#main-player").attr("oncanplaythrough","console.log('canplaythrough');console.log(new Date().getTime() / 1000);console.log(this.duration);this.play();");
+        return false;
+    });
+
     $(".legend").on("click",function(e){
         console.log(event.target.id);
         for (n in link_categories) {
@@ -337,6 +387,17 @@ type="application/jsonp"
 href="http://spreadsheets.google.com/feeds/list/0AmC3h3hWs3uTdEw0Ym83eGtfZmFqZ2JfeUREeV9VaXc/ocz/public/basic?alt=json-in-script"
  ex:converter="googleSpreadsheets" />
 
+ <link rel="exhibit/data"
+type="application/jsonp"
+href="http://spreadsheets.google.com/feeds/list/0Apvg5hmG6rxodGwtRUpSU3hZTnk3NlNhYndYTzhOWkE/ocx/public/basic?alt=json-in-script"
+ ex:converter="googleSpreadsheets" />
+ 
+
+
+ <link href="music-schema.js" type="application/json" rel="exhibit/data" />
+
+
+
 <style type="text/css">
 body {font-family: Helvetica, sans-serif;}
 
@@ -366,6 +427,11 @@ div.annotation {
 	font-family: serif;
 	font-size:.9em;
 }
+a.add-annotation {
+	margin-left:10px;
+	font-size:.7em;
+	color:black;
+}
 div.programnote a, div.programnote a:visited div.annotations a, div.annotations a:visited{
 	color:grey; text-decoration: underline;
 }
@@ -384,6 +450,7 @@ audio#main-player {width:100%;display:block; position:fixed;bottom:0px;}
 
 h5 {font-style:normal;
 	line-height: 100%;
+	margin-bottom:0;
 	font-weight:normal;
 	border-top: 3px double gray;
 }
@@ -430,7 +497,6 @@ text.shadow {
     background-color: rgba(0,0,0,.5);
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
-
 
 
 
@@ -482,10 +548,10 @@ div.exhibit-flowingFacet-body {
 <ul ex:role="viewPanel">
 
     <div ex:role="view" ex:showToolbox="true" ex:showSummary="true" ex:orders=".composer" ex:directions="ascending" ex:possibleOrders=".date, .composer" ex:showAll="false" ex:grouped="false" ex:abbreviatedCount="50"></div>
-    <div  style="border-top:2px solid grey;margin-top:5px;" ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('p.expandablenote').expander();">
+    <div  style="border-top:2px solid grey;margin-top:5px;" ex:role="lens" ex:onshow="$.expander.defaults.slicePoint = 280;$(this).find('p.expandablenote').expander(); render_annotation($('.annotation',this));">
     <a class="title-link" ex:href-subcontent="http://sethsem.uchicago.edu/~spb/fourcomposers/{{.mp3}}">
     <h3 style="font-family:serif;font-size:1.1em;font-weight:normal;margin:0;padding-left:10px;padding-top:5px;display:inline;">
-    	<span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span><span ex:if-exists=".subtitle">: <span ex:content=".subtitle"></span></span>
+    	<span ex:content=".id2"></span>. <span ex:content="if(exists(.year), .year, 'Unknown Year')"></span>, <span ex:content=".author"></span> | <span style="font-style:italic;" ex:content=".label"></span><span ex:if-exists=".subtitle">: <span ex:content=".subtitle"></span></span>
     </h3>
     <h3 ex:content=".movementTitle" style="font-family:sans-serif;font-size:0.8em;font-weight:normal;margin:0;display:block;padding-left:10px;"></h3>
     </a>
@@ -498,7 +564,9 @@ div.exhibit-flowingFacet-body {
     <div ex:if-exists=".slwork" ><b>Sounds Like:</b> <span ex:content=".slwork" ></span>    </div>
     <div ex:if-exists=".cites"  ><b>Cites:</b> <span ex:content=".cites" ></span>    </div>
     </div>
-	<div class="programnote" id="">
+    <a class="add-annotation" target="_blank" ex:href-subcontent="https://docs.google.com/forms/d/1UbJKCPBmtKepm0PcBYJ9I8vTotQf6XWJh8mWTaZhyUg/viewform?entry.740238253={{.id2}}&entry.613094054&entry.803570344&entry.1346460270&entry.373219845&entry.1661221929">Add Annotation</a>
+    
+	<div class="programnote">
     <p class="expandablenote" ex:if-exists=".noteComposerEnglish1" ex:content=".noteComposerEnglish1" ></p>
     <p class="expandablenote"  ex:if-exists=".noteComposerEnglish2" ex:content=".noteComposerEnglish2" ></p>
     <p class="expandablenote"  ex:if-exists=".noteComposerEnglish3" ex:content=".noteComposerEnglish3" ></p>       
@@ -509,7 +577,6 @@ div.exhibit-flowingFacet-body {
     <p class="expandablenote"  ex:if-exists=".noteOtherGerman1" ex:content=".noteOtherGerman1" ></p>       
     </div> 
     <div class="annotation"  ex:if-exists=".annotation" ex:content=".annotation" ></div>       
-  
     </div>
 
 </ul>
